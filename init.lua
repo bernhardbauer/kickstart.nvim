@@ -482,6 +482,7 @@ require('lazy').setup({
       lsp = {
         bin_path = vim.api.nvim_call_function('stdpath', { 'data' }) .. '/mason/bin/llm-ls',
       },
+      backend = 'ollama',
       model = 'qwen3:1.7b',
       url = 'http://localhost:11434', -- llm-ls uses "/api/generate"
       -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
