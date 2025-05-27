@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -477,6 +477,24 @@ require('lazy').setup({
     },
   },
   {
+    'huggingface/llm.nvim',
+    opts = {
+      lsp = {
+        bin_path = vim.api.nvim_call_function('stdpath', { 'data' }) .. '/mason/bin/llm-ls',
+      },
+      model = 'qwen3:1.7b',
+      url = 'http://localhost:11434', -- llm-ls uses "/api/generate"
+      -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
+      request_body = {
+        -- Modelfile options for the model you use
+        options = {
+          temperature = 0.2,
+          top_p = 0.95,
+        },
+      },
+    },
+  },
+  {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -782,7 +800,6 @@ require('lazy').setup({
       },
     },
   },
-
   { -- Autocompletion
     'saghen/blink.cmp',
     event = 'VimEnter',

@@ -1,7 +1,9 @@
 # Install dependencies
 
 ## HomeBrew
+
 ```
+brew install ollama
 brew install pkl-lsp
 brew install prettier
 ```
@@ -10,5 +12,6 @@ brew install prettier
 
 ```
 :MasonInstall typescript-language-server
+:MasonInstall llm-ls
 ... and all required ones
 ```
