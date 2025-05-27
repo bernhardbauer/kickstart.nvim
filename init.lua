@@ -773,7 +773,12 @@ require('lazy').setup({
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        yaml = { 'prettierd', 'prettier', stop_after_first = true },
+        markdown = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
@@ -1011,6 +1016,38 @@ require('lazy').setup({
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+  {
+    'apple/pkl-neovim',
+    lazy = true,
+    ft = 'pkl',
+    dependencies = {
+      {
+        'nvim-treesitter/nvim-treesitter',
+        build = function(_)
+          vim.cmd 'TSUpdate'
+        end,
+      },
+      'L3MON4D3/LuaSnip',
+    },
+    build = function()
+      require('pkl-neovim').init()
+
+      -- Set up syntax highlighting.
+      vim.cmd 'TSInstall pkl'
+    end,
+    config = function()
+      -- Set up snippets.
+      require('luasnip.loaders.from_snipmate').lazy_load()
+
+      -- Configure pkl-lsp
+      vim.g.pkl_neovim = {
+        -- start_command = { 'java', '-jar', '/path/to/pkl-lsp.jar' },
+        -- or if pkl-lsp is installed with brew:
+        start_command = { 'pkl-lsp' },
+        -- pkl_cli_path = '/path/to/pkl',
+      }
+    end,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
