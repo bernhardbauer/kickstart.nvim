@@ -413,7 +413,12 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = {
+            hidden = true,
+            find_command = { 'rg', '--files', '--hidden', '-g', '!{.git,.idea,node_modules}' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -473,25 +478,6 @@ require('lazy').setup({
       library = {
         -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      },
-    },
-  },
-  {
-    'huggingface/llm.nvim',
-    opts = {
-      lsp = {
-        bin_path = vim.api.nvim_call_function('stdpath', { 'data' }) .. '/mason/bin/llm-ls',
-      },
-      backend = 'ollama',
-      model = 'qwen3:1.7b',
-      url = 'http://localhost:11434', -- llm-ls uses "/api/generate"
-      -- cf https://github.com/ollama/ollama/blob/main/docs/api.md#parameters
-      request_body = {
-        -- Modelfile options for the model you use
-        options = {
-          temperature = 0.2,
-          top_p = 0.95,
-        },
       },
     },
   },
@@ -823,12 +809,12 @@ require('lazy').setup({
           -- `friendly-snippets` contains a variety of premade snippets.
           --    See the README about individual language/framework/plugin snippets:
           --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            'rafamadriz/friendly-snippets',
+            config = function()
+              require('luasnip.loaders.from_vscode').lazy_load()
+            end,
+          },
         },
         opts = {},
       },
