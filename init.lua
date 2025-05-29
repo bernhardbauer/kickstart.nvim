@@ -347,6 +347,8 @@ require('lazy').setup({
         { '<leader>f', group = '[F]ind' },
         { '<leader>r', group = '[R]un' },
         { '<leader>t', group = '[T]oggle' },
+        { '<leader>p', group = '[P]rettify' },
+        { '<leader>c', group = '[C]ompanion', mode = { 'n', 'v' } },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -1056,6 +1058,12 @@ require('lazy').setup({
   {
     'olimorris/codecompanion.nvim',
     opts = {
+      display = {
+        chat = {
+          auto_scroll = true,
+          start_in_insert_mode = false,
+        },
+      },
       adapters = {
         opts = {
           show_defaults = false,
@@ -1089,6 +1097,11 @@ require('lazy').setup({
         },
       },
     },
+    keys = {
+      { '<leader>ca', '<cmd>CodeCompanionActions<cr>', desc = '[C]ompanion [A]ctions' },
+      { '<leader>cc', '<cmd>CodeCompanionChat Toggle<cr>', desc = '[C]ompanion [C]hat' },
+      { '<leader>cv', '<cmd>CodeCompanionChat Add<cr>', desc = '[C]ompanion [V]isually selected to chat', mode = { 'v' } },
+    },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',
@@ -1109,7 +1122,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
