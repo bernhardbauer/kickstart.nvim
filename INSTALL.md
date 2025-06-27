@@ -11,7 +11,10 @@ brew install prettier
 ## NeoVim
 
 ```
+:MasonInstall angular-language-server
 :MasonInstall typescript-language-server
 :MasonInstall llm-ls
-... and all required ones
+:DapInstall js
+:DapInstall netcoredbg
 ```
+
