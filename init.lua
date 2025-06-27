@@ -346,9 +346,11 @@ require('lazy').setup({
       spec = {
         { '<leader>f', group = '[F]ind' },
         { '<leader>r', group = '[R]un' },
-        { '<leader>t', group = '[T]oggle' },
+        { '<leader>d', group = '[D]ebug' },
+        { '<leader>t', group = '[T]est' },
+        { '<leader>x', group = '[X]tras (toggles)' },
         { '<leader>p', group = '[P]rettify' },
-        { '<leader>c', group = '[C]ompanion', mode = { 'n', 'v' } },
+        { '<leader>c', group = '[C]ompanion AI', mode = { 'n', 'v' } },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
       },
     },
@@ -627,9 +629,9 @@ require('lazy').setup({
           --
           -- This may be unwanted, since they displace some of your code
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-            map('<leader>th', function()
+            map('<leader>xh', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
+            end, 'Toggle LSP Inlay [H]ints')
           end
         end,
       })
