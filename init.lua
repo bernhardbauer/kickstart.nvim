@@ -660,6 +660,10 @@ require('lazy').setup({
               end, bufnr)
             end
 
+            map('gru', function()
+              make_source_action_command(event.buf, client, 'source.removeUnused.ts')
+            end, 'TS Organize Imports')
+
             map('gro', function()
               make_source_action_command(event.buf, client, 'source.organizeImports.ts')
             end, 'TS Organize Imports')
