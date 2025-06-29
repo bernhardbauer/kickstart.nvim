@@ -638,18 +638,35 @@ require('lazy').setup({
 
           -- typescript specifics
           if client and client.name == 'ts_ls' then
-            map('gru', function()
-              client:request(
-                'workspace/executeCommand',
-                { command = '_typescript.organizeImports', arguments = { vim.api.nvim_buf_get_name(event.buf) } },
-                function(err, result)
-                  if err then
-                    vim.notify('Organize imports failed: ' .. tostring(err))
-                  end
-                end,
-                event.buf
-              )
+            local make_source_action_command = function(bufnr, client, source_action)
+              local params = vim.lsp.util.make_range_params()
+              params.context = {
+                only = { source_action },
+                diagnostics = vim.diagnostic.get(bufnr),
+              }
+
+              client.request('textDocument/codeAction', params, function(err, res)
+                assert(not err, err)
+                if
+                  res
+                  and res[1]
+                  and res[1].edit
+                  and res[1].edit.documentChanges
+                  and res[1].edit.documentChanges[1]
+                  and res[1].edit.documentChanges[1].edits
+                then
+                  vim.lsp.util.apply_text_edits(res[1].edit.documentChanges[1].edits, bufnr, client.offset_encoding)
+                end
+              end, bufnr)
+            end
+
+            map('gro', function()
+              make_source_action_command(event.buf, client, 'source.organizeImports.ts')
             end, 'TS Organize Imports')
+
+            map('grO', function()
+              make_source_action_command(event.buf, client, 'source.addMissingImports.ts')
+            end, 'TS Add Missing Imports')
           end
         end,
       })
