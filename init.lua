@@ -913,13 +913,23 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = true, auto_show_delay_ms = 500 },
+        ghost_text = { enabled = true, show_with_menu = true },
+        accept = { auto_brackets = { enabled = false } },
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'buffer', 'snippets', 'lazydev', 'minuet' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+          snippets = { min_keyword_length = 3, score_offset = -100 },
+          minuet = {
+            name = 'minuet',
+            module = 'minuet.blink',
+            async = true,
+            timeout_ms = 3000,
+            score_offset = 50,
+          },
         },
       },
 
@@ -1081,7 +1091,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
