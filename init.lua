@@ -344,6 +344,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
+        { 'gr', group = 'LSP Actions' },
         { '<leader>f', group = '[F]ind' },
         { '<leader>r', group = '[R]un' },
         { '<leader>d', group = '[D]ebug' },
@@ -446,6 +447,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fr', builtin.resume, { desc = '[F]ind [R]esume' })
       vim.keymap.set('n', '<leader>f.', builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>ft', '<cmd>TodoTelescope<cr>', { desc = '[F]ind [T]odos' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -633,6 +635,22 @@ require('lazy').setup({
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, 'Toggle LSP Inlay [H]ints')
           end
+
+          -- typescript specifics
+          if client and client.name == 'ts_ls' then
+            map('gru', function()
+              client:request(
+                'workspace/executeCommand',
+                { command = '_typescript.organizeImports', arguments = { vim.api.nvim_buf_get_name(event.buf) } },
+                function(err, result)
+                  if err then
+                    vim.notify('Organize imports failed: ' .. tostring(err))
+                  end
+                end,
+                event.buf
+              )
+            end, 'TS Organize Imports')
+          end
         end,
       })
 
@@ -693,7 +711,12 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
-
+        csharpier = {},
+        netcoredbg = {},
+        ['js-debug-adapter'] = {},
+        ['typescript-language-server'] = {},
+        ['angular-language-server'] = {},
+        tflint = {},
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
@@ -776,15 +799,24 @@ require('lazy').setup({
           }
         end
       end,
+      formatters = {
+        csharpier = {
+          command = 'dotnet-csharpier',
+          args = { '--write-stdout' },
+        },
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
+        cs = { 'csharpier' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         css = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        htmlangular = { 'prettierd', 'prettier', stop_after_first = true },
         json = { 'prettierd', 'prettier', stop_after_first = true },
         yaml = { 'prettierd', 'prettier', stop_after_first = true },
         markdown = { 'prettierd', 'prettier', stop_after_first = true },
@@ -913,7 +945,16 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      signs = false,
+      highlight = { pattern = [[.*<(KEYWORDS)\s*:?]] },
+      search = { pattern = [[\b(KEYWORDS)\b]] },
+    },
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
