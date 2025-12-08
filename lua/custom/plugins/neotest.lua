@@ -38,6 +38,7 @@ return {
       }
     end,
     keys = {
+      { '<leader>t', nil, desc = '[T]est' },
       { '<leader>tr', '<cmd>lua require("neotest").run.run()<cr>', desc = '[R]un Nearest' },
       { '<leader>tf', '<cmd>lua require("neotest").run.run(vim.fn.expand("%"))<cr>', desc = 'Run Current [F]ile' },
       { '<leader>tA', '<cmd>lua require("neotest").run.run(vim.uv.cwd())<cr>', desc = 'Run [A]ll Test Files' },

@@ -6,6 +6,7 @@
 brew install ollama
 brew install pkl-lsp
 brew install prettier
+brew install --cask claude-code
 ```
 
 ## NeoVim

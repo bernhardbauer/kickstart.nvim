@@ -11,7 +11,9 @@ return {
   },
   lazy = false,
   keys = {
-    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal', silent = true },
+    { '\\', ':Neotree reveal<CR>', desc = 'NeoTree reveal' },
+    { '<leader>xb', ':Neotree buffers<CR>', desc = 'NeoTree show buffers', silent = true },
+    { '<leader>hc', ':Neotree float git_status<CR>', desc = 'NeoTree show all changed files', silent = true },
   },
   opts = {
     filesystem = {

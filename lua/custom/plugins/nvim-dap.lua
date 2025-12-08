@@ -14,6 +14,7 @@ return {
     -- 'theHamsta/nvim-dap-virtual-text',
   },
   keys = {
+    { '<leader>d', nil, desc = '[D]ebug' },
     { '<leader>dB', '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<cr>', desc = '[B]reakpoint Condition' },
     { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>', desc = '[B]reakpoint Toggle' },
     { '<leader>dc', '<cmd>lua require("dap").continue()<cr>', desc = '[C]ontinue/Run' },

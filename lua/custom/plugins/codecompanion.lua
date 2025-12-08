@@ -42,6 +42,7 @@ return {
       },
     },
     keys = {
+      { '<leader>c', nil, desc = '[C]ompanion AI', mode = { 'n', 'v' } },
       { '<leader>cc', '<cmd>CodeCompanionChat Toggle<cr>', desc = '[C]ompanion [C]hat' },
       { '<leader>ca', '<cmd>CodeCompanionActions<cr>', desc = '[C]ompanion [A]ctions', mode = { 'n', 'v' } },
       { '<leader>cv', '<cmd>CodeCompanionChat Add<cr>', desc = '[C]ompanion [V]isually selected to chat', mode = { 'v' } },
