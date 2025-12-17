@@ -3,7 +3,9 @@ return {
     'stevearc/overseer.nvim',
     opts = {},
     config = function()
-      require('overseer').setup()
+      require('overseer').setup {
+        templates = { 'builtin', 'user.dotnet_run' },
+      }
     end,
     keys = {
       { '<leader>rv', '<cmd>OverseerToggle<cr>', desc = '[R]un [V]iew' },
