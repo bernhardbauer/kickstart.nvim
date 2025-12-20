@@ -31,6 +31,7 @@ return {
           position = 'float',
           width = 0.9,
           height = 0.9,
+          border = 'none',
           keys = {
             claude_hide = {
               toggle_key,
