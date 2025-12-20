@@ -20,7 +20,6 @@ return {
         pattern = 'OverseerList',
         callback = function()
           vim.bo.modifiable = false
-          vim.bo.readonly = true
           vim.bo.buftype = 'nofile'
           -- Prevent switching buffers in this window (Neovim 0.10+)
           vim.wo.winfixbuf = true
