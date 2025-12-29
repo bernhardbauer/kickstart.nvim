@@ -34,6 +34,7 @@ return {
     { '<leader>dw', '<cmd>lua require("dap.ui.widgets").hover()<cr>', desc = '[W]idgets' },
     -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
     { '<leader>du', '<cmd>lua require("dapui").toggle()<cr>', desc = 'DAP [U]I: See last session result.' },
+    -- TODO map to arrow keys
     { '<F1>', '<cmd>lua require("dap").step_into()<cr>', desc = 'Debug: Step Into' },
     { '<F2>', '<cmd>lua require("dap").step_over()<cr>', desc = 'Debug: Step Over' },
     { '<F3>', '<cmd>lua require("dap").step_out()<cr>', desc = 'Debug: Step Out' },
@@ -97,6 +98,12 @@ return {
         command = 'node',
         args = { os.getenv 'HOME' .. '/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js', '${port}' },
       },
+    }
+
+    dap.adapters.coreclr = {
+      type = 'executable',
+      command = os.getenv 'HOME' .. '/.local/share/nvim/mason/packages/netcoredbg/netcoredbg',
+      args = { '--interpreter=vscode' },
     }
   end,
 }
