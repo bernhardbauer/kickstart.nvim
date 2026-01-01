@@ -31,8 +31,8 @@ return {
       end,
       formatters = {
         csharpier = {
-          command = 'dotnet-csharpier',
-          args = { '--write-stdout' },
+          command = vim.fn.stdpath 'data' .. '/mason/bin/csharpier',
+          args = { 'format', '--write-stdout' },
         },
       },
       formatters_by_ft = {
