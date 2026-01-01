@@ -258,7 +258,7 @@ return {
         -- ts_ls = {},
         --
         csharpier = {},
-        netcoredbg = {},
+        ['csharp-language-server'] = {},
         ['js-debug-adapter'] = {},
         ['typescript-language-server'] = {},
         ['angular-language-server'] = {},

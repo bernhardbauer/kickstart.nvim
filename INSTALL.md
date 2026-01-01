@@ -24,6 +24,19 @@ export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
 :MasonInstall typescript-language-server
 :MasonInstall llm-ls
 :DapInstall js
-:DapInstall netcoredbg
 ```
 
+## netcoredbg (compilation for arm-based Mac)
+
+```
+brew install make cmake
+cd ~/git
+git clone https://github.com/Samsung/netcoredbg.git
+cd netcoredb
+rm -rf build src/debug/netcoredbg/bin bin
+mkdir build
+cd build
+CC=clang CXX=clang++ cmake ..
+make
+make install
+```

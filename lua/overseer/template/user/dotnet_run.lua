@@ -20,6 +20,16 @@ return {
           }
         end,
       })
+
+      table.insert(ret, {
+        name = string.format('%s %s %s', 'dotnet', 'build', file),
+        builder = function()
+          return {
+            cmd = { 'dotnet', 'build', file, '-c', 'Debug' },
+            -- cwd = workspace_path,
+          }
+        end,
+      })
     end
 
     table.insert(ret, {
