@@ -1,3 +1,5 @@
+local overseer = require 'overseer'
+
 ---@type overseer.TemplateFileProvider
 return {
   generator = function()
@@ -5,7 +7,7 @@ return {
     vim.list_extend(files, vim.fn.glob('*.csproj', false, true))
     vim.list_extend(files, vim.fn.glob('*/*.csproj', false, true))
     if #files == 0 then
-      return {}
+      return 'No csproj files found!'
     end
 
     local ret = {}
@@ -14,6 +16,7 @@ return {
       local project_name = vim.fn.fnamemodify(file, ':t:r')
       table.insert(ret, {
         name = string.format('%s %s %s', 'dotnet', 'run', project_name),
+        tags = { overseer.TAG.RUN },
         builder = function()
           return {
             cmd = { 'dotnet', 'run', '--project', file },
@@ -25,6 +28,7 @@ return {
 
     table.insert(ret, {
       name = 'dotnet test',
+      tags = { overseer.TAG.TEST },
       builder = function()
         return {
           cmd = { 'dotnet', 'test' },

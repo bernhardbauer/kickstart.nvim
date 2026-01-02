@@ -91,6 +91,11 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', 'grl', vim.diagnostic.open_float, { desc = '[L]ist diagnostic in floating window' })
 
+-- Close all panels keymap
+vim.keymap.set('n', '<leader>xx', function()
+  require('configs.nvim-close-all').close_all_panels()
+end, { desc = 'Close all panels' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
