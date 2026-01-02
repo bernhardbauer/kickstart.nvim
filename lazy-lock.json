@@ -5,6 +5,7 @@
   "claudecode.nvim": { "branch": "main", "commit": "6091df0e8edcdc92526cec23bbb42f63c0bb5ff2" },
   "codecompanion.nvim": { "branch": "main", "commit": "e39831eb745ebf1e0edcda25431c3255560729d4" },
   "conform.nvim": { "branch": "master", "commit": "8314f4c9e205e7f30b62147069729f9a1227d8bf" },
+  "diffview.nvim": { "branch": "main", "commit": "4516612fe98ff56ae0415a259ff6361a89419b0a" },
   "fidget.nvim": { "branch": "main", "commit": "64463022a1f2ff1318ab22a2ea4125ed9313a483" },
   "friendly-snippets": { "branch": "main", "commit": "572f5660cf05f8cd8834e096d7b4c921ba18e175" },
   "gitsigns.nvim": { "branch": "main", "commit": "130beacf8a51f00aede9c31064c749136679a321" },
