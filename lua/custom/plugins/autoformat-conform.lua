@@ -24,7 +24,7 @@ return {
           return nil
         else
           return {
-            timeout_ms = 500,
+            timeout_ms = 1000,
             lsp_format = 'fallback',
           }
         end
@@ -39,7 +39,6 @@ return {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
-        --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         cs = { 'csharpier' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },

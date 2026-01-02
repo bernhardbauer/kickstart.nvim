@@ -11,21 +11,12 @@ return {
     local ret = {}
 
     for _, file in ipairs(files) do
+      local project_name = vim.fn.fnamemodify(file, ':t:r')
       table.insert(ret, {
-        name = string.format('%s %s %s', 'dotnet', 'run', file),
+        name = string.format('%s %s %s', 'dotnet', 'run', project_name),
         builder = function()
           return {
             cmd = { 'dotnet', 'run', '--project', file },
-            -- cwd = workspace_path,
-          }
-        end,
-      })
-
-      table.insert(ret, {
-        name = string.format('%s %s %s', 'dotnet', 'build', file),
-        builder = function()
-          return {
-            cmd = { 'dotnet', 'build', file, '-c', 'Debug' },
             -- cwd = workspace_path,
           }
         end,
@@ -41,6 +32,19 @@ return {
         }
       end,
     })
+
+    for _, file in ipairs(files) do
+      local project_name = vim.fn.fnamemodify(file, ':t:r')
+      table.insert(ret, {
+        name = string.format('%s %s %s', 'dotnet', 'build', project_name),
+        builder = function()
+          return {
+            cmd = { 'dotnet', 'build', file, '-c', 'Debug' },
+            -- cwd = workspace_path,
+          }
+        end,
+      })
+    end
 
     return ret
   end,

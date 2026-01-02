@@ -206,7 +206,7 @@ require('lazy').setup({
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
       signs = false,
-      highlight = { pattern = [[.*<(KEYWORDS)\s*:?]] },
+      highlight = { pattern = [[.*<(KEYWORDS)\s*:?\s+]] },
       search = { pattern = [[\b(KEYWORDS)\b]] },
     },
   },
