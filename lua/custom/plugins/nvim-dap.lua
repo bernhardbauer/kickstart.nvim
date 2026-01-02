@@ -27,6 +27,20 @@ local toggle_dap_ui = function()
   require('dapui').toggle { reset = true }
 end
 
+local set_debug_keymaps = function()
+  vim.keymap.set('n', '<Up>', '<cmd>lua require("dap").continue()<cr>', { desc = 'Debug: Continue', silent = true })
+  vim.keymap.set('n', '<Down>', '<cmd>lua require("dap").step_over()<cr>', { desc = 'Debug: Step Over', silent = true })
+  vim.keymap.set('n', '<Right>', '<cmd>lua require("dap").step_into()<cr>', { desc = 'Debug: Step Into', silent = true })
+  vim.keymap.set('n', '<Left>', '<cmd>lua require("dap").step_out()<cr>', { desc = 'Debug: Step Out', silent = true })
+end
+
+local unset_debug_keymaps = function()
+  pcall(vim.keymap.del, 'n', '<Up>')
+  pcall(vim.keymap.del, 'n', '<Down>')
+  pcall(vim.keymap.del, 'n', '<Right>')
+  pcall(vim.keymap.del, 'n', '<Left>')
+end
+
 return {
   {
     'mfussenegger/nvim-dap',
@@ -54,16 +68,12 @@ return {
       { '<leader>dk', '<cmd>lua require("dap").up()<cr>', desc = 'Up' },
       { '<leader>dl', '<cmd>lua require("dap").run_last()<cr>', desc = 'Run [L]ast' },
       { '<leader>dP', '<cmd>lua require("dap").pause()<cr>', desc = '[P]ause' },
-      { '<leader>dr', '<cmd>lua require("dap").repl.toggle()<cr>', desc = 'Toggle [R]EPL' },
       { '<leader>ds', '<cmd>lua require("dap").session()<cr>', desc = '[S]ession' },
       { '<leader>dt', '<cmd>lua require("dap").terminate()<cr>', desc = '[T]erminate' },
-      { '<leader>dw', '<cmd>lua require("dap.ui.widgets").hover()<cr>', desc = '[W]idgets' },
+      { '<leader>dx', '<cmd>lua require("dap").clear_breakpoints()<cr>', desc = '[X] Clear all breakpoints' },
+      { '<leader>de', '<cmd>lua require("dap.ui.widgets").hover()<cr>', desc = '[E]xpand current variable' },
       -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
       { '<leader>du', toggle_dap_ui, desc = 'DAP [U]I: See last session result.' },
-      -- TODO map to arrow keys
-      { '<leader><Right>', '<cmd>lua require("dap").step_into()<cr>', desc = 'Debug: Step Into' },
-      { '<leader><Down>', '<cmd>lua require("dap").step_over()<cr>', desc = 'Debug: Step Over' },
-      { '<leader><Left>', '<cmd>lua require("dap").step_out()<cr>', desc = 'Debug: Step Out' },
     },
     config = function()
       local dap = require 'dap'
@@ -100,9 +110,16 @@ return {
       dap.listeners.after.event_initialized['dapui_config'] = function()
         close_non_dap_ui()
         require('dapui').open { reset = true }
+        set_debug_keymaps()
       end
-      -- dap.listeners.before.event_terminated['dapui_config'] = dapui.close
-      -- dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        unset_debug_keymaps()
+      end
+
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        unset_debug_keymaps()
+      end
 
       dap.adapters.coreclr = dotnet_adapter -- unit test debugging
       dap.adapters.netcoredbg = dotnet_adapter -- normal debugging
