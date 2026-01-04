@@ -34,6 +34,10 @@ return {
           command = vim.fn.stdpath 'data' .. '/mason/bin/csharpier',
           args = { 'format', '--write-stdout' },
         },
+        terraformfmt = {
+          command = 'terraform',
+          args = { 'fmt', '-list=false', '-' },
+        },
       },
       formatters_by_ft = {
         lua = { 'stylua' },
@@ -41,6 +45,7 @@ return {
         -- python = { "isort", "black" },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         cs = { 'csharpier' },
+        terraform = { 'terraformfmt' },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         typescript = { 'prettierd', 'prettier', stop_after_first = true },
         css = { 'prettierd', 'prettier', stop_after_first = true },
