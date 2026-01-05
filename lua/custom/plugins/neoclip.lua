@@ -9,6 +9,7 @@ return {
     end,
     keys = {
       { '<leader>fc', '<cmd>Telescope neoclip<cr>', desc = '[C]lipboard history' },
+      { '<leader>fm', '<cmd>Telescope macroscope<cr>', desc = '[M]acro history' },
     },
   },
 }
