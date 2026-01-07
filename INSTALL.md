@@ -17,6 +17,23 @@ brew install --cask claude-code
 export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
 ```
 
+## Dotnet
+
+Install dotnet via install scripts to support multiple runtimes next to eachother.
+https://github.com/dotnet/install-scripts?tab=readme-ov-file
+
+```
+./dotnet-install.sh --version 10.0.101
+./dotnet-install.sh --version 9.0.308
+```
+
+Add PATH and DOTNET_ROOT to .zshrc
+
+```
+export DOTNET_ROOT="/Users/bernhard/.dotnet"
+export PATH="/Users/bernhard/.dotnet:$PATH"
+```
+
 ## NeoVim
 
 ```
