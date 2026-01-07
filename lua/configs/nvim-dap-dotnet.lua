@@ -39,6 +39,12 @@ function M.get_highest_net_folder(bin_debug_path)
   return dirs[1]
 end
 
+function M.build_debug_cwd()
+  local current_file = vim.api.nvim_buf_get_name(0)
+  local current_dir = vim.fn.fnamemodify(current_file, ':p:h')
+  return M.find_project_root_by_csproj(current_dir)
+end
+
 -- Build and return the full path to the .dll file for debugging.
 function M.build_dll_path()
   local current_file = vim.api.nvim_buf_get_name(0)

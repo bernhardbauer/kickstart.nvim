@@ -13,6 +13,9 @@ local dotnet_configuration = {
     program = function()
       return require('configs.nvim-dap-dotnet').build_dll_path()
     end,
+    cwd = function()
+      return require('configs.nvim-dap-dotnet').build_debug_cwd()
+    end,
     stopAtEntry = true, -- required, otherwise the DAP breaks...
   },
 }
