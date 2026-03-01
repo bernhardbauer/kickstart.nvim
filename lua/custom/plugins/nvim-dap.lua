@@ -8,15 +8,21 @@ local dotnet_adapter = {
 local dotnet_configuration = {
   {
     type = 'coreclr',
-    name = 'launch - netcoredbg',
+    name = 'launch - dotnet run',
     request = 'launch',
     program = function()
-      return require('configs.nvim-dap-dotnet').build_dll_path()
+      return require('configs.nvim-dap-dotnet').build_and_get_dll_path()
     end,
     cwd = function()
       return require('configs.nvim-dap-dotnet').build_debug_cwd()
     end,
-    stopAtEntry = true, -- required, otherwise the DAP breaks...
+    env = function()
+      return require('configs.nvim-dap-dotnet').get_launch_env()
+    end,
+    args = function()
+      return require('configs.nvim-dap-dotnet').get_launch_args()
+    end,
+    stopAtEntry = false,
   },
 }
 
