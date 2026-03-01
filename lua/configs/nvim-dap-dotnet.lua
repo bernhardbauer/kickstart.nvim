@@ -45,15 +45,19 @@ function M.build_debug_cwd()
   return M.find_project_root_by_csproj(current_dir)
 end
 
+local function echo(msg, hl)
+  vim.api.nvim_echo({ { msg, hl or 'DiagnosticInfo' } }, false, {})
+  vim.cmd 'redraw'
+end
+
 -- Run dotnet build for the project and error on failure.
 function M.build_project(project_root, csproj_path)
-  vim.notify('Building ' .. vim.fn.fnamemodify(csproj_path, ':t') .. '...', vim.log.levels.INFO)
-  local result = vim.fn.system { 'dotnet', 'build', csproj_path, '--configuration', 'Debug' }
-  if vim.v.shell_error ~= 0 then
-    vim.notify('Build failed:\n' .. result, vim.log.levels.ERROR)
+  echo('Building ' .. vim.fn.fnamemodify(csproj_path, ':t') .. '...')
+  local result = vim.system({ 'dotnet', 'build', csproj_path, '--configuration', 'Debug' }, { text = true }):wait()
+  if result.code ~= 0 then
+    vim.notify('Build failed:\n' .. (result.stderr or result.stdout or ''), vim.log.levels.ERROR)
     error 'Build failed'
   end
-  vim.notify('Build successful', vim.log.levels.INFO)
 end
 
 -- Read the first "Project" launch profile from Properties/launchSettings.json.
@@ -113,7 +117,7 @@ function M.build_and_get_dll_path()
   local highest_net_folder = M.get_highest_net_folder(bin_debug_path)
   local dll_path = highest_net_folder .. '/' .. project_name .. '.dll'
 
-  vim.notify('Launching: ' .. dll_path, vim.log.levels.INFO)
+  echo('Build OK – launching ' .. project_name, 'DiagnosticOk')
   return dll_path
 end
 
