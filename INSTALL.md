@@ -8,7 +8,7 @@ brew install ollama
 brew install pkl-lsp
 brew install prettier
 brew install prettierd
-brew install --cask claude-code
+brew install opencode
 ```
 
 ### Environment variables (.zshrc)

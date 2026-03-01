@@ -1,0 +1,41 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "enabled_providers": ["amazon-bedrock"],
+  "model": "amazon-bedrock/eu.anthropic.claude-opus-4-6-v1",
+  "small_model": "amazon-bedrock/eu.anthropic.claude-haiku-4-5-20251001-v1:0",
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "eu-central-1",
+        "profile": "default"
+      }
+    }
+  },
+  "share": "disabled",
+  "permission": {
+    "*": "ask",
+    "read": {
+      "*": "allow",
+      "*.env": "deny",
+      "*.env.*": "deny",
+      "*.env.example": "allow"
+    },
+    "edit": "allow",
+    "glob": "allow",
+    "bash": {
+      "*": "ask",
+      "rm *": "deny",
+      "npm *": "allow",
+      "dotnet *": "allow",
+      "git *": "allow",
+      "git commit *": "deny",
+      "git push *": "deny"
+    },
+    "lsp": "allow",
+    "todoread": "allow",
+    "todowrite": "allow"
+  },
+  "watcher": {
+    "ignore": ["node_modules/**", "dist/**", ".git/**", "*/obj/**", "*/bin/**"]
+  }
+}
