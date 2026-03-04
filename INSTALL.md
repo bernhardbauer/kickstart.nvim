@@ -9,6 +9,7 @@ brew install pkl-lsp
 brew install prettier
 brew install prettierd
 brew install opencode
+brew install fd
 ```
 
 ### Environment variables (.zshrc)
