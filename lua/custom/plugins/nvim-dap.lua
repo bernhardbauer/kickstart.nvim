@@ -27,7 +27,10 @@ local dotnet_configuration = {
 }
 
 local close_non_dap_ui = function()
-  require('neo-tree.command').execute { action = 'close' }
+  local explorer = Snacks.picker.get { source = 'explorer' }[1]
+  if explorer then
+    explorer:close()
+  end
   require('overseer').close()
 end
 
