@@ -27,11 +27,7 @@ local dotnet_configuration = {
 }
 
 local close_non_dap_ui = function()
-  local explorer = Snacks.picker.get { source = 'explorer' }[1]
-  if explorer then
-    explorer:close()
-  end
-  require('overseer').close()
+  require('configs.nvim-close-all').close_non_dap_panels()
 end
 
 local toggle_dap_ui = function()
@@ -97,7 +93,8 @@ return {
         -- reasonable debug configurations
         automatic_installation = true,
         handlers = {},
-        ensure_installed = { 'js', 'coreclr' },
+        -- coreclr/netcoredbg is managed manually via a local build (see dotnet_adapter above)
+        ensure_installed = { 'js' },
       }
 
       -- Dap UI setup
