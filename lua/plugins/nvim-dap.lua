@@ -26,6 +26,26 @@ local dotnet_configuration = {
   },
 }
 
+-- Launch the single matching DAP config automatically, or fall back to the picker.
+local smart_continue = function()
+  local dap = require 'dap'
+  -- If a session is already active, just continue it.
+  if dap.session() then
+    dap.continue()
+    return
+  end
+  local ft = vim.bo.filetype
+  local configs = dap.configurations[ft] or {}
+  local matching = vim.tbl_filter(function(c)
+    return c.condition == nil or c.condition()
+  end, configs)
+  if #matching == 1 then
+    dap.run(matching[1])
+  else
+    dap.continue()
+  end
+end
+
 local close_non_dap_ui = function()
   require('configs.nvim-close-all').close_non_dap_panels()
 end
@@ -68,7 +88,7 @@ return {
       { '<leader>d', nil, desc = '[D]ebug' },
       { '<leader>dB', '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<cr>', desc = '[B]reakpoint Condition' },
       { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>', desc = '[B]reakpoint Toggle' },
-      { '<leader>dc', '<cmd>lua require("dap").continue()<cr>', desc = '[C]ontinue/Run' },
+      { '<leader>dc', smart_continue, desc = '[C]ontinue/Run' },
       { '<leader>da', '<cmd>lua require("dap").continue({ before = get_args })<cr>', desc = 'Continue/Run with [A]rgs' },
       { '<leader>dC', '<cmd>lua require("dap").run_to_cursor()<cr>', desc = 'Run to [C]ursor' },
       { '<leader>dg', '<cmd>lua require("dap").goto_()<cr>', desc = '[G]o to Line (No Execute)' },
@@ -147,11 +167,18 @@ return {
       }
 
       -- typescript
+      local is_test_file = function()
+        return vim.fn.expand('%:t'):match '%.spec%.[tj]sx?$' ~= nil or vim.fn.expand('%:t'):match '%.test%.[tj]sx?$' ~= nil
+      end
+
       local typescript_configuration = {
         {
           type = 'pwa-node',
           request = 'launch',
           name = 'launch - ts-node (current file)',
+          condition = function()
+            return not is_test_file()
+          end,
           program = '${file}',
           cwd = '${workspaceFolder}',
           runtimeExecutable = 'node',
@@ -164,6 +191,9 @@ return {
           type = 'pwa-node',
           request = 'launch',
           name = 'launch - tsx (current file)',
+          condition = function()
+            return not is_test_file()
+          end,
           program = '${file}',
           cwd = '${workspaceFolder}',
           runtimeExecutable = 'node',
@@ -176,11 +206,10 @@ return {
           type = 'pwa-node',
           request = 'launch',
           name = 'launch - jest (current file)',
+          condition = is_test_file,
           runtimeExecutable = 'node',
           runtimeArgs = function()
-            local jest_bin = vim.fn.filereadable(vim.fn.getcwd() .. '/node_modules/.bin/jest') == 1
-                and './node_modules/.bin/jest'
-              or 'jest'
+            local jest_bin = vim.fn.filereadable(vim.fn.getcwd() .. '/node_modules/.bin/jest') == 1 and './node_modules/.bin/jest' or 'jest'
             return { '--experimental-vm-modules', jest_bin, '--testPathPattern', '${fileBasenameNoExtension}', '--no-coverage' }
           end,
           rootDir = '${workspaceFolder}',
