@@ -1,3 +1,24 @@
+--- Walk up from `path` and return the directory containing the nearest
+--- jest.config.{ts,js,mjs,cjs} file. Falls back to vim.fn.getcwd().
+local function find_jest_config_dir(path)
+  local config_names = { 'jest.config.ts', 'jest.config.js', 'jest.config.mjs', 'jest.config.cjs' }
+  -- Start from the file's directory (or the path itself if already a dir)
+  local dir = vim.fn.isdirectory(path) == 1 and path or vim.fn.fnamemodify(path, ':h')
+  local root = vim.fn.getcwd()
+  while true do
+    for _, name in ipairs(config_names) do
+      if vim.fn.filereadable(dir .. '/' .. name) == 1 then
+        return dir
+      end
+    end
+    -- Stop once we've reached or passed the project root
+    if dir == root or dir == '/' then
+      return root
+    end
+    dir = vim.fn.fnamemodify(dir, ':h')
+  end
+end
+
 return {
   {
     'nvim-neotest/neotest',
@@ -14,7 +35,15 @@ return {
     opts = function()
       return {
         discovery = {
-          enabled = false,
+          enabled = true,
+          -- Only scan for TypeScript/JavaScript test files; avoids scanning
+          -- compiled output dirs and other noise.
+          filter_dir = function(name, _rel, _root)
+            -- node_modules / dist / build: JS/TS build artifacts
+            -- bin / obj: .NET build artifacts (also excluded by neotest-dotnet's own filter_dir)
+            -- .git / .vs: VCS and Visual Studio metadata
+            return name ~= 'node_modules' and name ~= 'dist' and name ~= 'build' and name ~= '.git' and name ~= '.vs' and name ~= 'bin' and name ~= 'obj'
+          end,
         },
         adapters = {
           require 'neotest-dotnet' {
@@ -26,12 +55,8 @@ return {
             },
           },
           require 'neotest-jest' {
-            -- jestCommand = require('neotest-jest.jest-util').getJestCommand(vim.fn.expand '%:p:h') .. ' --runInBand --detectOpenHandles --forceExit',
-            -- jestCommand = 'npm test --',
             jest_test_discovery = false,
-            cwd = function(path)
-              return vim.fn.getcwd()
-            end,
+            cwd = find_jest_config_dir,
           },
         },
         log_level = vim.log.levels.DEBUG, -- Set the log level
