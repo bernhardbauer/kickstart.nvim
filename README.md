@@ -8,7 +8,7 @@ Personal Neovim configuration, originally based on [kickstart.nvim](https://gith
 ## Features
 
 - **LSP** via `nvim-lspconfig` + Mason: C#, TypeScript, Angular, Lua, Terraform, PKL
-- **Completion** via `blink.cmp` with AI completions (local Ollama via `minuet-ai`)
+- **Completion** via `blink.cmp`: LSP, snippets, buffer, path
 - **Formatting** via `conform.nvim`: `csharpier`, `stylua`, `prettierd`, `terraform fmt`
 - **Debugging (DAP)**: deep .NET/C# support with custom build automation + JS/TS debugging
 - **Testing**: `neotest` with `neotest-jest` and `neotest-dotnet`

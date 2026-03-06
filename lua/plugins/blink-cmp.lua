@@ -78,17 +78,10 @@ return {
       },
 
       sources = {
-        default = { 'lsp', 'path', 'buffer', 'snippets', 'lazydev', 'minuet' },
+        default = { 'lsp', 'path', 'buffer', 'snippets', 'lazydev' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
           snippets = { min_keyword_length = 3, score_offset = -100 },
-          minuet = {
-            name = 'minuet',
-            module = 'minuet.blink',
-            async = true,
-            timeout_ms = 3000,
-            score_offset = 50,
-          },
         },
       },
 
