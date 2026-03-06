@@ -130,10 +130,12 @@ return {
         unset_debug_keymaps()
       end
 
+      -- dotnet
       dap.adapters.coreclr = dotnet_adapter -- unit test debugging
       dap.adapters.netcoredbg = dotnet_adapter -- normal debugging
       dap.configurations.cs = dotnet_configuration
 
+      -- nodejs
       dap.adapters['pwa-node'] = {
         type = 'server',
         host = 'localhost',
@@ -143,6 +145,55 @@ return {
           args = { os.getenv 'HOME' .. '/.local/share/nvim/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js', '${port}' },
         },
       }
+
+      -- typescript
+      local typescript_configuration = {
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'launch - ts-node (current file)',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+          runtimeExecutable = 'node',
+          runtimeArgs = { '--loader', 'ts-node/esm' },
+          resolveSourceMapLocations = { '${workspaceFolder}/**', '!**/node_modules/**' },
+          sourceMaps = true,
+          skipFiles = { '<node_internals>/**', '**/node_modules/**' },
+        },
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'launch - tsx (current file)',
+          program = '${file}',
+          cwd = '${workspaceFolder}',
+          runtimeExecutable = 'node',
+          runtimeArgs = { '--import', 'tsx' },
+          resolveSourceMapLocations = { '${workspaceFolder}/**', '!**/node_modules/**' },
+          sourceMaps = true,
+          skipFiles = { '<node_internals>/**', '**/node_modules/**' },
+        },
+        {
+          type = 'pwa-node',
+          request = 'launch',
+          name = 'launch - jest (current file)',
+          runtimeExecutable = 'node',
+          runtimeArgs = function()
+            local jest_bin = vim.fn.filereadable(vim.fn.getcwd() .. '/node_modules/.bin/jest') == 1
+                and './node_modules/.bin/jest'
+              or 'jest'
+            return { '--experimental-vm-modules', jest_bin, '--testPathPattern', '${fileBasenameNoExtension}', '--no-coverage' }
+          end,
+          rootDir = '${workspaceFolder}',
+          cwd = '${workspaceFolder}',
+          console = 'integratedTerminal',
+          internalConsoleOptions = 'neverOpen',
+          sourceMaps = true,
+          skipFiles = { '<node_internals>/**', '**/node_modules/**' },
+        },
+      }
+
+      dap.configurations.typescript = typescript_configuration
+      dap.configurations.typescriptreact = typescript_configuration
     end,
   },
 }
