@@ -23,6 +23,7 @@
     "edit": "allow",
     "glob": "allow",
     "grep": "allow",
+    "list": "allow",
     "bash": {
       "*": "ask",
       "rm *": "deny",

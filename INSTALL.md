@@ -3,8 +3,6 @@
 ## HomeBrew
 
 ```
-brew install dotnet
-brew install ollama
 brew install pkl-lsp
 brew install prettier
 brew install prettierd
