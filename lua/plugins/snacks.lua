@@ -16,7 +16,9 @@ return {
       picker = {
         hidden = true, -- show hidden files by default across all sources
       }, -- used by opencode.select()
-      explorer = {}, -- used by opencode.select()
+      explorer = {
+        replace_netrw = false, -- don't auto-open explorer on `nvim .`
+      },
       indent = {},
       gitbrowse = {},
       lazygit = {},

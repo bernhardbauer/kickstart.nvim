@@ -3,6 +3,10 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
+-- Disable netrw so it doesn't hijack directory arguments (snacks explorer handles directories and the default dashboard)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -131,6 +135,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.hl.on_yank()
+  end,
+})
+
+-- When nvim is opened with a directory argument (e.g. `nvim .`), cd into it
+vim.api.nvim_create_autocmd('VimEnter', {
+  desc = 'Change to directory provided when launching neovim',
+  group = vim.api.nvim_create_augroup('kickstart-fix-cwd', { clear = true }),
+  callback = function()
+    local arg = vim.fn.argv(0)
+    if arg and arg ~= '' and vim.fn.isdirectory(arg) == 1 then
+      vim.cmd('cd ' .. vim.fn.fnameescape(arg))
+    end
   end,
 })
 
