@@ -86,9 +86,9 @@ return {
     },
     keys = {
       { '<leader>d', nil, desc = '[D]ebug' },
+      { '<leader>dd', smart_continue, desc = '[C]ontinue/Run' },
       { '<leader>dB', '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<cr>', desc = '[B]reakpoint Condition' },
       { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>', desc = '[B]reakpoint Toggle' },
-      { '<leader>dc', smart_continue, desc = '[C]ontinue/Run' },
       { '<leader>da', '<cmd>lua require("dap").continue({ before = get_args })<cr>', desc = 'Continue/Run with [A]rgs' },
       { '<leader>dC', '<cmd>lua require("dap").run_to_cursor()<cr>', desc = 'Run to [C]ursor' },
       { '<leader>dg', '<cmd>lua require("dap").goto_()<cr>', desc = '[G]o to Line (No Execute)' },

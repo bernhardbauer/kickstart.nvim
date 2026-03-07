@@ -45,7 +45,7 @@ return {
     end,
     keys = {
       { '<leader>c', nil, desc = 'AI / OpenCode' },
-      { '<leader>ca', oc('ask', '@this: ', { submit = true }), desc = 'Ask opencode…', mode = { 'n', 'x' } },
+      { '<leader>cc', oc('ask', '@this: ', { submit = true }), desc = 'Ask opencode…', mode = { 'n', 'x' } },
       { '<leader>cx', oc 'select', desc = 'Execute opencode action…', mode = { 'n', 'x' } },
       { '<C-,>', oc 'toggle', desc = 'Toggle opencode', mode = { 'n', 't' } },
       { 'go', oc('operator', '@this '), desc = 'Add range to opencode', mode = { 'n', 'x' }, expr = true },

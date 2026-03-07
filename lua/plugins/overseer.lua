@@ -27,8 +27,8 @@ return {
       })
     end,
     keys = {
+      { '<leader>rr', '<cmd>OverseerRun<cr>', desc = '[R]un [A]ny' },
       { '<leader>rv', '<cmd>OverseerToggle<cr>', desc = '[R]un [V]iew' },
-      { '<leader>ra', '<cmd>OverseerRun<cr>', desc = '[R]un [A]ny' },
       { '<leader>rt', '<cmd>OverseerTaskAction<cr>', desc = '[R]un [T]ask Action' },
       { '<leader>rs', '<cmd>OverseerShell<cr>', desc = '[R]un [S]hell' },
     },
