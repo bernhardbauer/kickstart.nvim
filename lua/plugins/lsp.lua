@@ -14,6 +14,9 @@ local servers = {
   ['typescript-language-server'] = {},
   ['angular-language-server'] = {},
   tflint = {},
+  emmet_ls = {
+    filetypes = { 'html', 'css', 'scss', 'sass', 'less', 'javascriptreact', 'typescriptreact', 'vue', 'svelte' },
+  },
   lua_ls = {
     settings = {
       Lua = {
