@@ -7,17 +7,21 @@ Personal Neovim configuration, originally based on [kickstart.nvim](https://gith
 
 ## Features
 
-- **LSP** via `nvim-lspconfig` + Mason: C#, TypeScript, Angular, Lua, Terraform, PKL
-- **Completion** via `blink.cmp`: LSP, snippets, buffer, path
+- **LSP** via `nvim-lspconfig` + Mason: C#, TypeScript, Angular, Emmet, Lua, Terraform, PKL
+- **Completion** via `blink.cmp`: LSP, snippets, buffer, path, with ghost text and signature help
 - **Formatting** via `conform.nvim`: `csharpier`, `stylua`, `prettierd`, `terraform fmt`
-- **Debugging (DAP)**: deep .NET/C# support with custom build automation + JS/TS debugging
+- **Debugging (DAP)**: deep .NET/C# support with auto-build + env parsing, and JS/TS/Jest debugging
 - **Testing**: `neotest` with `neotest-jest` and `neotest-dotnet`
 - **Task running**: `overseer.nvim` with custom `dotnet run/build/test` templates
 - **File explorer + UI**: `snacks.nvim` (explorer, dashboard, lazygit, notifications, indent guides)
-- **Fuzzy finding**: Telescope
+- **Fuzzy finding**: Telescope with branch-file search and fzf-native sorter
 - **File bookmarks**: `grapple.nvim` (per-git-branch file tagging)
 - **AI agent**: `opencode.nvim` connected to Amazon Bedrock / Claude Sonnet
 - **Git**: `gitsigns.nvim` + lazygit via snacks
+- **UI enhancements**: `noice.nvim` (command line, messages, LSP hover), `which-key.nvim`
+- **Navigation**: `other.nvim` (Angular alt-file jump), `sibling-jump.nvim` (treesitter sibling nodes)
+- **Editing**: `nvim-surround`, `nvim-autopairs`, `mini.ai` extended text objects
+- **npm**: `package-info.nvim` shows dependency versions as virtual text
 
 ## Installation
 
@@ -74,7 +78,6 @@ Inside Neovim, install the remaining tools that Mason doesn't handle automatical
 ```
 :MasonInstall angular-language-server
 :MasonInstall typescript-language-server
-:MasonInstall llm-ls
 :DapInstall js
 ```
 
@@ -91,6 +94,7 @@ Inside Neovim, install the remaining tools that Mason doesn't handle automatical
 └── lua/
     ├── plugins/                # Plugin configs (auto-imported by lazy.nvim)
     ├── configs/
+    │   ├── bool-toggle.lua     # <C-a> boolean toggle (true/false/TRUE/FALSE)
     │   ├── nvim-close-all.lua  # Close all panels (explorer, DAP UI, etc.)
     │   └── nvim-dap-dotnet.lua # .NET DAP: auto-build, launchSettings.json parsing
     ├── kickstart/
@@ -106,13 +110,15 @@ Leader key: `<Space>`
 
 ### General
 
-| Key           | Action                        |
-| ------------- | ----------------------------- |
-| `\`           | Toggle file explorer          |
-| `<Esc>`       | Clear search highlight        |
-| `<leader>q`   | Open diagnostic quickfix list |
-| `<leader>xx`  | Close all panels              |
-| `<C-h/j/k/l>` | Navigate splits               |
+| Key           | Action                                         |
+| ------------- | ---------------------------------------------- |
+| `\`           | Toggle file explorer                           |
+| `<Esc>`       | Clear search highlight                         |
+| `<leader>q`   | Open diagnostic quickfix list                  |
+| `grl`         | Show diagnostic in floating window             |
+| `<leader>xx`  | Close all panels                               |
+| `<C-h/j/k/l>` | Navigate splits                                |
+| `<C-a>`       | Toggle boolean under cursor / increment number |
 
 ### LSP
 
@@ -133,64 +139,93 @@ Leader key: `<Space>`
 
 ### Find (`<leader>f`)
 
-| Key                | Action                      |
-| ------------------ | --------------------------- |
-| `<leader>ff`       | Find files                  |
-| `<leader>fg`       | Live grep                   |
-| `<leader>fw`       | Grep word under cursor      |
-| `<leader><leader>` | Find open buffers           |
-| `<leader>fr`       | Resume last picker          |
-| `<leader>f.`       | Recent files                |
-| `<leader>ft`       | TODOs                       |
-| `<leader>fc`       | Clipboard history           |
-| `<leader>fm`       | Macro history               |
-| `<leader>/`        | Fuzzy search current buffer |
+| Key                | Action                               |
+| ------------------ | ------------------------------------ |
+| `<leader>ff`       | Find files (incl. hidden/gitignored) |
+| `<leader>fg`       | Live grep                            |
+| `<leader>fw`       | Grep word under cursor               |
+| `<leader>fd`       | Find diagnostics                     |
+| `<leader>fh`       | Find help tags                       |
+| `<leader>fk`       | Find keymaps                         |
+| `<leader>fs`       | Find/select Telescope source         |
+| `<leader>fb`       | Find files in current git branch     |
+| `<leader>fa`       | Find alternative file (Angular)      |
+| `<leader><leader>` | Find open buffers                    |
+| `<leader>fr`       | Resume last picker                   |
+| `<leader>f.`       | Recent files                         |
+| `<leader>ft`       | TODOs                                |
+| `<leader>fc`       | Clipboard history                    |
+| `<leader>fm`       | Macro history                        |
+| `<leader>fn`       | Find Neovim config files             |
+| `<leader>f/`       | Grep in open files                   |
+| `<leader>/`        | Fuzzy search current buffer          |
 
 ### Debug (`<leader>d`)
 
 | Key                    | Action                                                              |
 | ---------------------- | ------------------------------------------------------------------- |
-| `<leader>dc`           | Start / continue                                                    |
+| `<leader>dd`           | Smart continue (auto-pick config or show picker)                    |
+| `<leader>da`           | Continue / run with args                                            |
 | `<leader>db`           | Toggle breakpoint                                                   |
 | `<leader>dB`           | Conditional breakpoint                                              |
+| `<leader>dC`           | Run to cursor                                                       |
+| `<leader>dg`           | Go to line (no execute)                                             |
+| `<leader>dj`           | Down stack frame                                                    |
+| `<leader>dk`           | Up stack frame                                                      |
+| `<leader>dl`           | Run last                                                            |
+| `<leader>dP`           | Pause                                                               |
+| `<leader>ds`           | Show session                                                        |
 | `<leader>du`           | Toggle DAP UI                                                       |
-| `<leader>de`           | Inspect variable                                                    |
+| `<leader>de`           | Inspect variable (hover)                                            |
 | `<leader>dt`           | Terminate session                                                   |
 | `<leader>dx`           | Clear all breakpoints                                               |
 | `<Up/Down/Right/Left>` | Continue / Step over / Step into / Step out _(active session only)_ |
 
 ### Test (`<leader>t`)
 
-| Key          | Action             |
-| ------------ | ------------------ |
-| `<leader>tr` | Run nearest test   |
-| `<leader>tf` | Run file           |
-| `<leader>tA` | Run all tests      |
-| `<leader>td` | Debug nearest test |
-| `<leader>ts` | Toggle summary     |
-| `<leader>to` | Show output        |
-| `<leader>tw` | Watch toggle       |
+| Key          | Action              |
+| ------------ | ------------------- |
+| `<leader>tt` | Run nearest test    |
+| `<leader>tf` | Run file            |
+| `<leader>tA` | Run all tests       |
+| `<leader>tl` | Run last            |
+| `<leader>td` | Debug nearest test  |
+| `<leader>ts` | Toggle summary      |
+| `<leader>to` | Show output         |
+| `<leader>tO` | Toggle output panel |
+| `<leader>tS` | Stop test run       |
+| `<leader>tw` | Watch toggle        |
 
 ### Run / Tasks (`<leader>r`)
 
-| Key          | Action           |
-| ------------ | ---------------- |
-| `<leader>rv` | Toggle task list |
-| `<leader>ra` | Run task         |
-| `<leader>rt` | Task action      |
-| `<leader>rs` | Shell            |
+| Key           | Action                  |
+| ------------- | ----------------------- |
+| `<leader>rr`  | Run task                |
+| `<leader>rv`  | Toggle task list        |
+| `<leader>rt`  | Task action             |
+| `<leader>rs`  | Shell                   |
+| `<leader>rnu` | npm: Update dependency  |
+| `<leader>rnd` | npm: Delete dependency  |
+| `<leader>rnc` | npm: Change dep version |
 
 ### Git (`<leader>h` / `<leader>g`)
 
-| Key          | Action              |
-| ------------ | ------------------- |
-| `<leader>gg` | Open lazygit        |
-| `]c` / `[c`  | Next / prev hunk    |
-| `<leader>hs` | Stage hunk          |
-| `<leader>hr` | Reset hunk          |
-| `<leader>hb` | Blame line          |
-| `<leader>hd` | Diff against index  |
-| `<leader>xb` | Toggle inline blame |
+| Key          | Action                     |
+| ------------ | -------------------------- |
+| `<leader>gg` | Open lazygit               |
+| `]c` / `[c`  | Next / prev hunk           |
+| `<leader>hs` | Stage hunk                 |
+| `<leader>hr` | Reset hunk                 |
+| `<leader>hS` | Stage entire buffer        |
+| `<leader>hR` | Reset entire buffer        |
+| `<leader>hu` | Undo stage hunk            |
+| `<leader>hp` | Preview hunk               |
+| `<leader>hb` | Blame line                 |
+| `<leader>hB` | Full buffer blame          |
+| `<leader>hd` | Diff against index         |
+| `<leader>hD` | Diff against last commit   |
+| `<leader>xb` | Toggle inline blame        |
+| `<leader>xD` | Toggle show deleted inline |
 
 ### File Marks / Grapple (`<leader>m`)
 
@@ -203,12 +238,29 @@ Leader key: `<Space>`
 
 ### AI (`<leader>c`)
 
-| Key          | Action                  |
-| ------------ | ----------------------- |
-| `<leader>ca` | Ask opencode            |
-| `<leader>cx` | Execute opencode action |
-| `<C-,>`      | Toggle opencode panel   |
-| `go`         | Add range to opencode   |
+| Key          | Action                         |
+| ------------ | ------------------------------ |
+| `<leader>cc` | Ask opencode about selection   |
+| `<leader>cx` | Execute opencode action        |
+| `<C-,>`      | Toggle opencode panel          |
+| `go`         | Add range to opencode          |
+| `goo`        | Add current line to opencode   |
+| `<leader>ca` | Send file to opencode (picker) |
+
+### Navigation
+
+| Key     | Action                                 |
+| ------- | -------------------------------------- |
+| `<C-j>` | Jump to next sibling node (treesitter) |
+| `<C-k>` | Jump to prev sibling node (treesitter) |
+
+### Surround (`nvim-surround`)
+
+| Key  | Action                         |
+| ---- | ------------------------------ |
+| `ys` | Add surrounding (e.g. `ysiw"`) |
+| `cs` | Change surrounding             |
+| `ds` | Delete surrounding             |
 
 ### Other
 
@@ -216,3 +268,25 @@ Leader key: `<Space>`
 | ------------ | -------------------- |
 | `<leader>pp` | Format buffer        |
 | `<leader>xn` | Notification history |
+
+## Notable Behaviours
+
+### Boolean Toggle (`<C-a>`)
+
+`<C-a>` toggles `true`↔`false`, `True`↔`False`, `TRUE`↔`FALSE` under the cursor. Falls back to the standard number increment when no boolean is found.
+
+### DAP — Smart Continue
+
+`<leader>dd` checks if a session is already active (resumes it), otherwise filters available launch configs by a `condition()` function and auto-starts if exactly one matches — no picker unless ambiguous.
+
+### DAP — Dynamic Arrow Keys
+
+Arrow keys are only mapped during an active debug session and are automatically removed when the session terminates.
+
+### DAP — .NET Auto-Build
+
+Before launching a .NET debug session, the config walks up the directory tree to find the nearest `.csproj`, runs `dotnet build --configuration Debug`, and reads `Properties/launchSettings.json` to extract environment variables, `ASPNETCORE_URLS`, and command-line args automatically.
+
+### Neotest — Jest Config Discovery
+
+A custom `find_jest_config_dir()` traversal walks up from the active file to find the nearest `jest.config.{ts,js,mjs,cjs}`, enabling correct behaviour in monorepos with nested jest configs.
