@@ -25,27 +25,9 @@ return {
       notifier = {},
     },
     keys = {
-      {
-        '<leader>gg',
-        function()
-          Snacks.lazygit.open()
-        end,
-        desc = 'Lazygit',
-      },
-      {
-        '\\',
-        function()
-          Snacks.explorer.open()
-        end,
-        desc = 'Toggle Explorer',
-      },
-      {
-        '<leader>xn',
-        function()
-          Snacks.notifier.show_history()
-        end,
-        desc = 'Notification History',
-      },
+      { '<leader>gg', "<cmd>lua Snacks.lazygit.open()<cr>", desc = 'Lazygit' },
+      { '\\', "<cmd>lua Snacks.explorer.open()<cr>", desc = 'Toggle Explorer' },
+      { '<leader>xn', "<cmd>lua Snacks.notifier.show_history()<cr>", desc = 'Notification History' },
     },
   },
 }
