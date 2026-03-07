@@ -90,6 +90,13 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', 'grl', vim.diagnostic.open_float, { desc = '[L]ist diagnostic in floating window' })
 
+-- <C-a>: toggle boolean under cursor, fall back to built-in increment
+vim.keymap.set('n', '<C-a>', function()
+  if not require('configs.bool-toggle').toggle() then
+    vim.cmd('normal! ' .. vim.v.count1 .. '\x01') -- original <C-a> increment, preserve count
+  end
+end, { desc = 'Toggle boolean / increment number' })
+
 -- Close all panels keymap
 vim.keymap.set('n', '<leader>xx', function()
   require('configs.nvim-close-all').close_all_panels()
