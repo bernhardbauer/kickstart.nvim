@@ -44,7 +44,6 @@ return {
       vim.o.autoread = true -- Required for `opts.events.reload`
     end,
     keys = {
-      { '<leader>c', nil, desc = 'AI / OpenCode' },
       { '<leader>cc', oc('ask', '@this: ', { submit = true }), desc = 'Ask opencode…', mode = { 'n', 'x' } },
       { '<leader>cx', oc 'select', desc = 'Execute opencode action…', mode = { 'n', 'x' } },
       { '<C-,>', oc 'toggle', desc = 'Toggle opencode', mode = { 'n', 't' } },

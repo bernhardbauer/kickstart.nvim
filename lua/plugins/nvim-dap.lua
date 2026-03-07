@@ -85,7 +85,6 @@ return {
       'jay-babu/mason-nvim-dap.nvim',
     },
     keys = {
-      { '<leader>d', nil, desc = '[D]ebug' },
       { '<leader>dd', smart_continue, desc = '[C]ontinue/Run' },
       { '<leader>dB', '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<cr>', desc = '[B]reakpoint Condition' },
       { '<leader>db', '<cmd>lua require("dap").toggle_breakpoint()<cr>', desc = '[B]reakpoint Toggle' },

@@ -37,7 +37,6 @@ return {
       package_manager = 'npm',
     },
     keys = {
-      { '<leader>rn', nil, desc = '[N]pn Tasks' },
       { '<leader>rnu', '<cmd>lua require("package-info").update()<cr>', desc = '[U]pdate dependency', silent = true, noremap = true },
       { '<leader>rnd', '<cmd>lua require("package-info").delete()<cr>', desc = '[D]elete dependency', silent = true, noremap = true },
       { '<leader>rnc', '<cmd>lua require("package-info").change_version()<cr>', desc = '[C]hange dependency version', silent = true, noremap = true },
