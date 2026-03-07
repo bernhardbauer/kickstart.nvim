@@ -74,8 +74,19 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          -- Rename the variable under your cursor.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          -- Rename via ts_ls only (when available) to avoid double prompts when multiple LSP clients support rename (e.g. ts_ls + angularls).
+          map('grn', function()
+            local clients = vim.lsp.get_clients { bufnr = 0, method = 'textDocument/rename' }
+            local preferred = vim.iter(clients):find(function(c)
+              return c.name == 'ts_ls'
+            end)
+            vim.lsp.buf.rename(nil, preferred and {
+              filter = function(c)
+                return c.name == 'ts_ls'
+              end,
+            } or nil)
+          end, '[R]e[n]ame')
+
           -- Execute a code action, usually your cursor needs to be on top of an error or a suggestion from your LSP for this to activate.
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
           map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
