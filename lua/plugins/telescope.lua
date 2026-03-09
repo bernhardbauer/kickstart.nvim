@@ -36,7 +36,14 @@ return {
         pickers = {
           find_files = {
             hidden = true,
-            find_command = { 'rg', '--files', '--hidden', '--no-ignore-vcs', '-g', '!{.git,.idea,.vs,.vscode,.angular,.cache,node_modules,dist,out,bin,obj}' },
+            find_command = {
+              'rg',
+              '--files',
+              '--hidden',
+              '--no-ignore-vcs',
+              '-g',
+              '!{.git,.idea,.vs,.vscode,.angular,.cache,node_modules,dist,out,out-tsc,bin,obj}',
+            },
           },
         },
       }
