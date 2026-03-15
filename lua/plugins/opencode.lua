@@ -42,6 +42,25 @@ return {
       }
 
       vim.o.autoread = true -- Required for `opts.events.reload`
+
+      -- Disable normal-mode mouse scrolling over the opencode window regardless
+      -- of which window is currently focused, so the TUI viewport stays fixed.
+      local function is_opencode_win(winid)
+        local buf = vim.api.nvim_win_get_buf(winid)
+        return vim.bo[buf].buftype == 'terminal'
+          and vim.api.nvim_buf_get_name(buf):match('opencode')
+      end
+      local function guard_scroll(fallback)
+        return function()
+          local mousewin = vim.fn.getmousepos().winid
+          if mousewin ~= 0 and is_opencode_win(mousewin) then
+            return -- suppress
+          end
+          return fallback
+        end
+      end
+      vim.keymap.set('n', '<ScrollWheelUp>',   guard_scroll('<ScrollWheelUp>'),   { expr = true })
+      vim.keymap.set('n', '<ScrollWheelDown>', guard_scroll('<ScrollWheelDown>'), { expr = true })
     end,
     keys = {
       { '<leader>cc', oc('ask', '@this: ', { submit = true }), desc = 'Ask opencode…', mode = { 'n', 'x' } },
